@@ -1,0 +1,36 @@
+name: Build and Test
+
+on:
+  push:
+    branches: 
+      - '**'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - step: 
+          name: Checkout Code
+          uses: actions/checkout@v3
+
+      - step: 
+          name: Install .NET SDK
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: '6.0.x'
+
+      - step: 
+          name: Restore NuGet Packages
+          run: dotnet restore
+
+      - step: 
+          name: Compile the Application
+          run: dotnet build --no-restore
+
+      - step: 
+          name: Execute Unit Tests
+          run: dotnet test --no-build --verbosity normal
